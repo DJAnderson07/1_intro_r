@@ -1,26 +1,948 @@
 ---
-title       : 
-subtitle    : 
-author      : 
-job         : 
+title       : An introduction to R
+subtitle    : What it is and why you should care
+author      : Daniel Anderson
 framework   : io2012        # {io2012, html5slides, shower, dzslides, ...}
 highlighter : highlight.js  # {highlight.js, prettify, highlight}
-hitheme     : tomorrow      # 
+hitheme     : zenburn      # 
 widgets     : []            # {mathjax, quiz, bootstrap}
 mode        : selfcontained # {standalone, draft}
 knit        : slidify::knit2slides
+--- 
+<style>
+em {
+  font-style: italic
+}
+</style>
+
+<style>
+strong {
+  font-weight: bold;
+}
+</style>
+
+```{r setup, include = FALSE}
+library(knitr)
+opts_knit$set(root.dir = "/Users/Daniel/Dropbox/Teaching/tidyverse_course/")
+```
+## Agenda
+* Introduce R
+* Very basics of R (object assignment)
+* R packages
+* Reproducible work flows
+	+ *rmarkdown* and *knitr* packages; *rmarkdown notebooks*
+	+ Documenting code
+	+ Generating reports for others
+* Guided practice
+
+Overall purpose of today: Get you excited about R! Will be a lot of me showing, and not a lot of you doing. That will change with more workshops.
+
+----
+## How to learn R?
+* Three most important ingredients: time, time, and more time
+* A sprinkling of dedication and determination help.
+* Be patient and forgiving with yourself. It will feel slow at first. Most people have not trained themselves to think in this way.
+
+----
+## What is R?
+* A programming language
+* Tremendously powerful and flexible statistical software that happens to be free
+* No point-and-click interface
+* Incredible array of external "packages" available for specialized analyses, data visualizations, or to automate much of the data "munging" process
+
+---- 
+## Code-based interface
+<div align = "center">
+<img src = assets/img/sublime.png width = 1000 height = 750>
+</div>
+
+----
+<div align = "center">
+<img src = assets/img/rstudio.png width = 1000 height = 750>
+</div>
+
+![rstudio](assets/img/rstudio.png)
+
+---- &twocol
+## Moving to code/programming
+
+*** =left
+# Advantages
+* Flexibility
+	+ Only limited by your own creativity (and current level of programming skills, which are ever-evolving)
+* Transparency
+	+ Documented record of every step taken in your data preparation and analysis
+* Efficiency
+	+ Many (most?) tasks can be automated and/or applied to multiple datasets/variables simultaneously or essentially simultaneously
+
+*** =right
+# Disadvantages
+* Steep learning curve
+	+ Absolutely requires a significant time investment, both to learn initially and build fluency
+	+ Equivalent to learning a new language
+* You will lose patience with point-and-click interfaces
+* Likely to become "one of the converted"
+
+----
+## The R Learning Curve
+
+```{r, echo = FALSE, fig.height = 8, fig.width = 12}
+curve(x^3, from = -50, to = 50, lty = 3, col = "cadetblue3", lwd = 3,
+	axes = FALSE, xlab = "Time", ylab = "Learning", 
+	main = "Steepness of the line roughly corresponds to your required effort")
+axis(1, at = seq(-50, 50, 10),  labels = seq(0, 100, 10))
+axis(2, at = seq(-1e5, 1e5, 2e4),  labels = seq(0, 101, 10))
+```
+
+----
+## My goals for this lecture series
+
+1. Peak your interest in R enough that you are willing to put in the effort to learn it. It's worth it.
+
+2. Provide you a basic foundation in R so you can get help elsewhere and not be completely lost.
+
+3. Introduce you to a suite of packages to help make the shift easier.
+
+4. Introduce you the powerful graphical potential of R.
+
+5. Be an ally for you in your journey.
+
+----
+## My goals for a spring course
+
+```{r, echo = FALSE, fig.height = 8, fig.width = 12}
+curve(x^3, from = -50, to = 50, lty = 3, col = "cadetblue3", lwd = 3,
+	 axes = FALSE, xlab = "Time", ylab = "Learning", 
+	main = "Steepness of the line roughly corresponds to your required effort")
+axis(1, at = seq(-50, 50, 10),  labels = seq(0, 100, 10))
+axis(2, at = seq(-1e5, 1e5, 2e4),  labels = seq(0, 101, 10))
+abline(h = 50, col = "gray", lwd = 2, lty = 2)
+text(-10, y = 35e3, "Get you here", col = "gray30")
+arrows(x0 = -20, x1 = -40, y0 = 3e4, y1 = 3e3, 
+		length = .1, 
+		col = "gray",
+		lwd = 2)
+```
+
+----
+## My goals for a second course
+
+```{r, echo = FALSE, fig.height = 8, fig.width = 12}
+curve(x^3, from = -50, to = 50, lty = 3, col = "cadetblue3", lwd = 3,
+	 axes = FALSE, xlab = "Time", ylab = "Learning", 
+	main = "Steepness of the line roughly corresponds to your required effort")
+axis(1, at = seq(-50, 50, 10),  labels = seq(0, 100, 10))
+axis(2, at = seq(-1e5, 1e5, 2e4),  labels = seq(0, 101, 10))
+rect(15, 0, 70, 1e6, 
+	border = FALSE,
+	col = rgb(.2, .2, .2, .25))
+text(-20, y = 5e4, "Get you somewhere in here", col = "gray30")
+arrows(x0 = 0, x1 = 12, y0 = 5e4, y1 = 5e4, 
+		length = .1, 
+		col = "gray",
+		lwd = 2)
+```
+
+
+---- &twocol
+## Two course sequence
+
+*** =left
+# First Course
+<div align = "center">
+<img src = assets/img/r4ds.png width = 400 height = 500>
+</div>
+
+
+*** =right
+# Next Course
+<div align = "center">
+<img src = assets/img/advancedr.png width = 400 height = 500>
+</div>
+
+----
+## These books are both available for free!
+
+* R for Data Science: http://r4ds.had.co.nz
+* Advanced R: http://adv-r.had.co.nz
+
+---- .segue
+# Very basics of R
+
+----
+## R as a big calculator
+
+```{r calc_add}
+3 + 2
+```
+
+```{r calc_eq}
+(1/-(3/2)^2) / 2^-1/9
+```
+
+
+------ &twocol
+*** =left
+
+# Object Assignment
+
+```{r ob_assign1}
+a <- 3
+b <- 2
+a + b
+a / (a + b)
+```
+
+*** =right
+
+# Object re-assignment
+
+```{r ob_assign2}
+a <- 3
+a
+a <- 7
+a
+```
+
+------ &twocol
+## Object Assignment (continued)
+*** =left
+Objects can be of a variety of types.
+
+```{r ob_types}
+string <- "Hello world!"
+logical <- TRUE
+double <- 3.2587021
+Integer <- 6L
+```
+*** =right
+In this case, we can't exactly do arithimetic with all of these. 
+  For example
+
+```{r, error = TRUE}
+string + double
+```
+But, these objects can be extremely useful in programming.
+
+---- &twocol
+## Functions and getting help
+
+*** =left
+
+# R functions
+* Anything that carries out an operation in R is a function, even `+`. 
+* Functions (outside of primitive functions) are preceded by `()`
+    + e.g., `sum()`, `lm()`
+
+*** =right
+
+# Getting help
+* `?` can be helpful, but often too advanced early on
+    + Helpful for understanding the formal arguments of a function
+    + Scroll down to the examples first
+* Google is your  best friend
+* Other good websites
+    + http://stackoverflow.com      
+    + Mailing lists: 
+          - https://stat.ethz.ch/mailman/listinfo/r-help
+    
+
+---- .segue
+# R Packages
+
+
+---- &twocol
+## R packages
+
+*** =left
+
+R ships with considerable functionality. It also comes  with a set of *pre-loaded* packages 
+
+* e.g.
+	+ "base"
+	+ "graphics"
+	+ "stats" 
+
+R also comes with a set of packages installed, but not loaded on launch
+
+* e.g.
+	+ "boot"
+	+ "MASS"
+	+ "Matrix"
+
+*** =right
+
+Pre-loaded packages operate "out of the box". For example, `plot` is part of the *graphics* package, which ships with R.
+
+```{r first_plot, fig.width = 6, fig.height = 6}
+plot(x = 1:10, y = 1:10)
+```
+
+----
+## R packages (continued)
+Packages that come installed, but not pre-loaded, require an explicit call to the library first. For example, to simulate data from a multivariate normal distribution we could use `MASS::mvrnorm`.
+
+```{r first_lib}
+# Set up simulation parameters
+n_obs <- 1000
+means <- c(100, 50)
+error_cv <- matrix(c(100, 44, 
+					  44, 49), byrow = TRUE, ncol = 2) # part of base
+
+cov2cor(error_cv) # part of stats package
+```
+
+----
+## Simulation, continued
+
+```{r}
+library(MASS) # pre-installed package
+sim <- mvrnorm(n = n_obs, mu = means, Sigma = error_cv)
+head(sim)
+```
+
+----
+```{r sim_cor_plot, fig.width = 12}
+plot(sim)
+```
+
+---
+```{r check_sim_cor}
+cor(sim)
+```
+<br>
+
+# Overall takeaway
+There is a *ton* of functionality that comes with R right from your initial download. But, the functionality can be extended further by installing other packages.
+
+----
+## Other packages
+
+# On CRAN 
+<div align = "center">
+<img src = assets/img/pkg_growth.png width = 650 height = 350>
+</div>
+
+* Any of these can be installed with `install.packages("pkg_name")`. You will then have access to all the functionality of the package.
+* Notice this plot only goes to mid-2014. As of this writing (12/22/16), there are 9,763 packages available on CRAN! See https://cran.r-project.org/web/packages/
+
+---- &twocol
+## Other packages
+# On github
+
+*** =left
+
+<div align = "center">
+<img src = assets/img/r2Winsteps.png width = 500 height = 500>
+</div>
+
+*** =right
+
+<div align = "center">
+<img src = assets/img/github_pkgs.png width = 500 height = 500>
+</div>
+
+----
+## Installing from github
+
+First, install the *devtools* package from CRAN
+
+```{r install_devtools, eval = FALSE}
+install.packages("devtools")
+```
+
+Next, load the *devtools* library to access the `install_github` function. For example, to install my *r2Winsteps* package
+
+```{r install_r2Winsteps, eval = FALSE}
+library(devtools)
+install_github("DJAnderson07/r2Winsteps")
+```
+
+----
+You then have access to all the functionality of that package once you load it.
+
+```{r load_r2Winsteps}
+library(r2Winsteps)
+data(science)
+head(science)
+```
+
+----
+```{r run_pc_mod}
+items <- science[ ,-c(26:29)]
+dems <- science[ ,c(26:29)]
+
+pars <- runWinsteps(items, dems)
+head(pars$ItemParameters)
+```
+
+----
+```{r plot_pc_mod, fig.width = 13, fig.height = 8}
+plot(pars)
+```
+
+----
+## Is this exciting!?! YES!!!
+Why is this such a big deal? 
+* With just a basic knowledge of R you have access to literally thousands of packages
+	+ Expanding on a literal daily basis
+	+ Provides access to cutting edge and specialized functionality for analysis, data visualization, and data munging
+	+ Some of the most modern thinking on data analysis topics are often represented in these packages
+
+----
+## A few examples of amazing packages
+# First: the data
+
+https://cepa.stanford.edu/seda/overview
+
+```{r load_seda, include = FALSE}
+seda <- read.csv("./course_materials/data/district means national-referenced by year grade subject (long file).csv")
+seda$time <- seda$grade - 3
+seda$time2 <- seda$time^2
+
+# select cohort
+criteria <- data.frame(year = 2009:2013, grade = 3:7)
+seda <- merge(seda, criteria, by = c("year", "grade"), all.y = TRUE)
+
+```
+
+(data loaded from code not displayed)
+
+```{r head_seda}
+head(seda)
+```
+
+----
+## lme4
+Let's fit a multilevel linear growth model for ELA
+
+Question: How much does the progression from Grades 3-7 vary by state?
+
+```{r lme4_demo}
+# install.packages("lme4")
+library(lme4)
+
+mlm <- lmer(mean_link_ela ~ 1 + time + (1 + time|stateabb), data = seda)
+```
+
+----
+```{r smry_lme4_lin}
+summary(mlm)
+```
+
+----
+## Prettier output? Use a different package!
+
+```{r pretty_lme4_output, eval = FALSE}
+# install.packages("sjPlot")
+library(sjPlot)
+sjt.lmer(mlm, p.kr = FALSE) # Note, second argument generally not necessary
+```
+
+----
+
+`r sjPlot::sjt.lmer(mlm, p.kr = FALSE, no.output = TRUE)$knitr`
+
+
+----
+## Plot differences between states
+
+```{r lme4_state_diff, results = "hide", fig.height = 6, fig.width = 12}
+library(lattice) # pre-installed package
+re <- ranef(mlm, condVar = TRUE)
+qqmath(re)
+```
+
+----
+## Compare to a curvilinear model
+
+```{r lme4_curv}
+mlm_c <- lmer(mean_link_ela ~ 1 + time + time2 + (1 + time|stateabb), data = seda)
+```
+For more abbreviated (and essential) output
+
+```{r mlm_c_smry}
+library(arm)
+display(mlm_c, detail = TRUE)
+```
+
+----
+## Compare models
+
+```{r compare_mods}
+anova(mlm, mlm_c)
+```
+
+----
+## A few other examples
+# The ggplot2 package
+
+```{r random_samp, include = FALSE}
+library(tidyverse)
+d <- seda %>% 
+  gather(mean_link_ela:se_link_math, 
+    key = "key",
+    value = "Score") %>% 
+  separate(key, c("Variable", "Discard", "Subject"), sep = "_") %>% 
+  spread(Variable, Score) %>% 
+  select(-Discard)
+
+set.seed(1000)
+s1 <- d[d$stateabb %in% sample(levels(d$stateabb), 9), ]
+s2 <- split(s1, as.character(s1$stateabb))
+s2 <- lapply(s2, function(x) {	
+	x[x$leaid %in% sample(unique(x$leaid), 10), ]
+})
+s2 <- do.call(rbind, s2)
+```
+```{r ex_d}
+head(s2)
+```
+
+----
+## ggplot Ex 1
+
+```{r ex_ggplot1, warning = FALSE, message = FALSE, fig.height = 6, fig.width = 12}
+ggplot(data = s2, aes(x = grade, y = mean, group = leaid)) +  
+	geom_smooth() +
+	facet_wrap(~stateabb)
+```
+
+----
+## ggplot Ex 2
+
+```{r ex_ggplot2, warning = FALSE, message = FALSE, fig.height = 6, fig.width = 12}
+ggplot(data = s2, aes(x = grade, y = mean, group = leaid)) +  
+	geom_smooth(se = FALSE) +
+	facet_wrap(~stateabb)
+```
+
+----
+## Quickly...
+# A few other new exciting advancements
+
+----
+## ggvis
+* Eventual replacement for *ggplot2*
+* Currently fairly limited
+	+ Can't produce interactive plots within something like this slideshow
+Let's take a look! http://ggvis.rstudio.com/interactivity.html
+
+----
+## The *gganimate* extension to *ggplot2*
+
+```{r gganimate1, echo = FALSE, fig.width = 12, fig.height = 8, fig.show = "animate", message = FALSE}
+library(lattice)
+library(ggplot2)
+library(broom)
+
+mod <- loess(NOx ~ E, ethanol, degree = 1, span = .75)
+fit <- augment(mod)
+
+library(dplyr)
+
+dat <- ethanol %>%
+  inflate(center = unique(ethanol$E)) %>%
+  mutate(dist = abs(E - center)) %>%
+  filter(rank(dist) / n() <= .75) %>%
+  mutate(weight = (1 - (dist / max(dist)) ^ 3) ^ 3)
+
+fits <- data_frame(span = seq(.1, 1, .1)) %>%
+  group_by(span) %>%
+  do(augment(loess(NOx ~ E, ethanol, degree = 1, span = .$span)))
+
+p <- ggplot(fits, aes(E, NOx, frame = span)) +
+  geom_point() +
+  geom_line(aes(y = .fitted), color = "red") +
+  ggtitle("span = ")
+
+library(gganimate)
+gg_animate(p)
+
+```
+**Credit:** David Robinson (http://varianceexplained.org/files/loess.html)
+
+
+----
+## What does LOESS (and LOWESS) stand for again?
+* Locally weighted scatterplot smoothing
+* non-parametric
+* Similar in for to k-nearest neighbor models
+
+Let's visualize it!
+
+----
+## Animating LOESS fits with different spans
+
+```{r gganimate2, echo = FALSE, message = FALSE, warning = FALSE, fig.show = "animate", interval = 0.2}
+spans <- c(.25, .5, .75, 1)
+
+# create loess fits, one for each span
+fits <- data_frame(span = spans) %>%
+  group_by(span) %>%
+  do(augment(loess(NOx ~ E, ethanol, degree = 1, span = .$span)))
+
+# calculate weights to reproduce this with local weighted fits
+dat <- ethanol %>%
+  inflate(span = spans, center = unique(ethanol$E)) %>%
+  mutate(dist = abs(E - center)) %>%
+  filter(rank(dist) / n() <= span) %>%
+  mutate(weight = (1 - (dist / max(dist)) ^ 3) ^ 3)
+
+# create faceted plot with changing points, local linear fits, and vertical lines,
+# and constant hollow points and loess fit
+p <- ggplot(dat, aes(E, NOx)) +
+  geom_point(aes(alpha = weight, frame = center)) +
+  geom_smooth(aes(group = center, frame = center, weight = weight), method = "lm", se = FALSE) +
+  geom_vline(aes(xintercept = center, frame = center), lty = 2) +
+  geom_point(shape = 1, data = ethanol, alpha = .25) +
+  geom_line(aes(y = .fitted, frame = E, cumulative = TRUE), data = fits, color = "red") +
+  facet_wrap(~span) +
+  ylim(0, 5) +
+  ggtitle("x0 = ")
+
+gg_animate(p)
+
+```
+**Credit:** David Robinson (http://varianceexplained.org/files/loess.html)
+
+
+----
+## Other advancements
+
+* ggplot extensions: https://www.ggplot2-exts.org/ggiraph.html
+* html widgets: http://www.htmlwidgets.org/showcase_leaflet.html
+
+---- .segue
+# R and Reproducible Research
+
 ---
 
-## Read-And-Delete
+## A couple caveats 
+* Much of what I'm going to be discussing represents an ideal that I have only recently begun working towards.
+* None of what I will talk about should be taken as a referendum on you or
+  your current practices. However, I hope to convince you that you should be working toward the reproducible research ideal, and that, as a field, we should be moving toward reproducible research being the *minimal standard*.
+* I will be focusing on reproducible research with R. Other options are
+  available but, in my view, none are as clear, comprehensive, and easy to implement as the tools at your disposal through R.
 
-1. Edit YAML front matter
-2. Write using R Markdown
-3. Use an empty line followed by three dashes to separate slides!
+----
+## What is reproducible research?
+* **Replicability** is the gold standard for research. Ideally, most research
+  would be verified through replication. 
+* Reproducibility represents a minimal standard, which itself can aid
+  replication (tremendously), by conducting and documenting the research sufficiently that **an independent researcher could reproduce all the results from a study**, provided the data were available
 
---- .class #id 
+----
+## Why should we care?
+* Reproducibility as an ethical standard
+  + More transparency
+  + More potential for results to be verified (and errors found/corrected)
+* If your work **is not** reproducible, it is usually not truly replicable.
+* If your work **is** reproducible, then others have a "recipe" for replication
 
-## Slide 2
+
+----
+## Are journal articles research? 
+* Initially, we may think of journal articles as research, but really the
+  research is everything that went into the article, not the article itself. 
+* Some (Buckheit & Donoho, 2015) conceive of the article as the
+  "advertisement".
+* If all we have is the advertisement, can we really fully understand the
+  steps and decisions made during the research?
+    + In large-scale data analysis, the answer is generally "no".  
+
+----
+## Tangential benefits
+Striving toward reproducible research will:
+* Make your own code more efficient/easily interpretable
+  + Can help with collaboration on a project
+* Reduce errors
+* Increase efficiency by not having to redo tables and figures with each tweak
+  to a model.
+
+----
+## What does the process actually look like?
+* Start with a basic text document (not Word, text)
+* Use the text document to write your article
+* Embed code within the text document that corresponds to your analysis. Note
+  this is not just copying the code in. The code should be live and what you're working with while conducting your research.
+* Render the document into a different format (pdf, html, etc.).
+  + Select which code (if any) will be displayed
+  + Build tables of results and plots to be produced
+* Readers can then read the "advertisement", but if they are interested 
+  in reproducing your results (maybe because they disagree with you, or they think your results are weird and want to clearly see all the steps you took), they can access the text file that contains the computer code.
+* The end result is a single product that has the advertisement and the
+  research process embedded.
+
+----
+## Other reasons dynamic documents are useful
+Outside of reproducibility, you may want to use R Markdown to:
+* Produce slides
+    + Just be careful, I have a horror story
+* Keep track of your analysis (notes, essentially), even if you end up using 
+  something like Word
+* Share code with others
+* Quickly share results with others
+* etc... ideas?
+
+----
+## Why produce dynamic documents?
+* Reproducible research principles
+  - Increase transparency
+* Can (eventually) be more efficient
+* Simple for simple tasks (like homeworks)
+    + Complexity increases as you ask more of it
+
+---- .segue
+# On to the mechanics (briefly)
 
 
+---- &twocol
+## Headings and Lists
+
+*** =left
+
+```
+# Level 1
+## Level 2 
+### Level 3 (etc.)
+```
+
+```
+* Unordered list
+  - inset
+    + inset more
+  - etc.
+
+1. Ordered list
+  a. blah blah
+2. More stuff
+```
+
+*** =right
+
+![headersLists](./assets/img/headersLists.png)
+
+---- 
+## Code chunks
+
+Start a code chunk with \`\`\`{r chunkName, chunkOptions}, then produce some r code, then close the 
+  chunk with three additional back ticks \`\`\`.
 
 
+![codechunk1](./assets/img/codeChunk1.png)
+
+
+```{r rCalc1}
+a <- 3
+b <- 5
+
+a + b * (exp(a)/b)
+```
+
+--- &twocol
+## echo and eval
+
+*** =left
+
+You can show code without evaluating it, using `eval = FALSE`. 
+
+<div align = "left">
+<img src = ./assets/img/codeChunk2.png width = 400 height = 100>
+</div>
+
+
+```{r rCalc2, eval = FALSE}
+a + b * (exp(a)/b)
+```
+
+*** =right
+
+Alternatively, you can evaluate the code without displaying it, using `echo = 
+  FALSE`.
+
+<div align = "left">
+<img src = ./assets/img/codeChunk3.png width = 550 height = 150>
+</div>
+
+```{r plotExample, echo = FALSE, fig.width = 6, fig.height = 3.8}
+data(mtcars)
+with(mtcars, plot(mpg, hp, 
+  xlab = "Miles Per Gallon", 
+  ylab = "Horsepower",
+  main = "Relation between Miles Per Gallon and Horsepower"))
+```
+
+-----
+## tables (very briefly)
+* Packages that can produce tables for R markdown (in order from least to most
+  flexible)
+    + *knitr*
+    + *pander* 
+    + *xtable*
+
+# Displaying tables
+Change the `results` chunk option to "asis"
+
+---- &twocol
+## knitr::kable
+
+For very simple tables, use `kable` from the *knitr* package
+
+```{r kable}
+id <- rep(1:3, each = 2)
+condition <- rep(c("A", "B"), 3)
+score <- rnorm(6, 10, 3)
+data <- data.frame(id, condition, score)
+
+library(knitr)
+kable(data)
+```
+
+----
+## pander
+
+* Great for producing summary tables.
+    + Must specify `style = "rmarkdown"`
+* Doesn't seem to work well with *slidify* (not sure why).
+* Hopefully we'll have time to look at this a bit with the example.
+
+```{r pander, results = "asis"}
+library(pander)
+pander(lm(Sepal.Width ~ Species, data = iris), 
+    covariate.labels = c("Versicolor" ,  "Virginica" ), 
+    style = "rmarkdown")
+```
+
+----
+## xtable
+
+For `xtable`, you have to make sure you specify `results = "asis"`. 
+
+
+If you're in a markup environment (what we've been talking about), you have to also make sure you specify `type = "html"`.
+
+```{r xtable1, results = "asis", message = FALSE}
+library(xtable)
+mat <- round(matrix(c(0.9, 0.89, 200, 0.045, 2.0), c(1, 5)), 4) 
+rownames(mat) <- "$y_{t-1}$"
+colnames(mat) <- c("$R^2$", "$\\bar{x}$", "F-stat", "S.E.E", "DW") 
+mat <- xtable(mat)
+print(mat, 
+  sanitize.text.function = function(x) {x},
+  type = "html")
+```
+
+----
+Same example, but without specifying `results = "asis"`
+
+```{r xtable2}
+print(mat, 
+  sanitize.text.function = function(x) {x},
+  type = "html")
+```
+
+----- &twocol
+## Rendering the document
+
+*** =left
+
+Through a text editor (e.g., SublimeText)
+
+```{r installRmarkDown, eval = FALSE}
+install.packages("rmarkdown")
+library(rmarkdown)
+setwd("dir/to/Rmd/doc")
+render("ExampleRMarkdown.Rmd", 
+  "html_document")
+```
+
+Note that the document type need not be specified if `output:` is supplied in 
+  the YAML front matter. 
+
+*** =right
+
+Through RStudio
+
+![knitRStudio](./assets/img/knitRStudio.png)
+
+---- &twocol
+## Final Product!
+
+*** =left
+<div align = "right">
+<img src = ./assets/img/rMarkdownCode.png width = 500 height = 600>
+</div>
+
+*** =right
+<div align = "left">
+<img src = ./assets/img/fullRMarkdownDoc.png width = 500 height = 600>
+</div>
+
+----
+## A few complications
+
+If you use *RStudio*, you should be able to render HTML output automatically
+with the `knit2html` button.
+
+However, if you use a text editor (like I do), then you'll need to also install
+*pandoc* (http://pandoc.org).
+
+![pandoc](./assets/img/pandoc.png)
+
+
+---- &twocol
+## PDF output
+
+Regardless of whether you use RStudio or not, you will also need to install a TeX distribution.
+
+*** =left
+* Macs: MacTeX (http://tug.org/mactex/)
+![macTeX](./assets/img/macTeX.png)
+
+*** =right
+* Windows: MikTeX (http://miktex.org)
+![mikTeX](./assets/img/mikTeX.png)
+
+----
+## Summarizing
+* R Markdown is relatively simple and easy to learn (R is the hard part, R Markdown is easy in comparison). 
+* Tables are probably the most difficult piece.
+* Lots of options to get it to do what you want.
+* Great for sharing and documenting your work.
+
+**but...**
+
+* The more you ask from it, the more difficult it will become.
+* At a certain point, you may need more flexibility.
+
+----
+## Final remarks on R Markdown
+
+* Make sure to look at the documentation
+    + http://RMarkdown.rstudio.com
+    + http://RMarkdown.rstudio.com/authoring_basics.html
+    + http://RMarkdown.rstudio.com/authoring_rcodechunks.html
+
+* The more you ask from it, the more complicated it becomes.
+
+* Challenges
+    + Word is the industry standard (frustratingly so, to me) 
+        * Word output is less than ideal
+    + Can be difficult when collaborating with others
+    + Some journal articles *require* papers submitted in Word
+        * Potentially get a pdf to word converter, but still less than ideal
+    + Advanced features have a relatively steep learning curve
+
+----
+## Take home message
+* It's a fairly big challenge to start to write *papers* using this method
+* Fairly straightforward as a method to produce reports/keep track of your
+  analysis
+* Start small and work your way up; don't get discouraged too easily
+* R Notebooks may be a good place to start
+
+I'm still actively learning this whole process. I recommend Yihui's book, it's quite good.
+
+--- .segue
+# Brief R notebooks demo and guided practice
