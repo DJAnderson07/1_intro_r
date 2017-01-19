@@ -403,66 +403,65 @@ You then have access to all the functionality of that package once you load it.
 ```r
 library(r2Winsteps)
 data(science)
-```
-
-```
-## Error in eval(expr, envir, enclos): cannot open file '/Users/Daniel/Dropbox/Teaching/tidyverse_course/1_intro_r/.cache/kable_5032776211884c61693451246bfbb505.rdb': No such file or directory
-```
-
-```r
 head(science)
 ```
 
 ```
-## Error in head(science): cannot open file '/Users/Daniel/Dropbox/Teaching/tidyverse_course/1_intro_r/.cache/load_r2Winsteps_3fdddce81ab4519e3a36c8d4f2bf1df0.rdb': No such file or directory
+##   item1 item2 item3 item4 item5 item6 item7 item8 item9 item10 item11
+## 1     1     2     1     1     1     0     2     0     1      2      2
+## 2     2     2     2     2     2     2     2     2     2      2      2
+## 3     2     2     1     1     0     1     1     0     1      2      2
+## 4     1     0     1     0     0     1     0     1     2      2      1
+## 5     1     0     1     0     1     0     1     0     0      1      1
+## 6     1     0     1     1     2     1     1     0     1      1      1
+##   item12 item13 item14 item15 item16 item17 item18 item19 item20 item21
+## 1      2      2      0      2      1      1      2      2      0      2
+## 2      2      2      2      2      2      2      2      2      2      2
+## 3      2      2      1      2      2      1      2      2      1      2
+## 4      2      2      1      1      1      1      2      2      0      2
+## 5      1      1      0      0      1      1      2      2      1      1
+## 6      2      1      0      1      0      1      2      2      1      0
+##   item22 item23 item24 item25 Sex LastName FirstName MiddleName
+## 1      1      0      2      0   M  Rossner      Marc     Daniel
+## 2      2      2      2      2   M  Rossner  Lawrence         F.
+## 3      1      1      1      1   M  Rossner      Toby         G.
+## 4      1      1      1      1   M  Rossner   Michael         T.
+## 5      1      1      1      0   F  Rossner   Rebecca         A.
+## 6      1      2      1      0   M  Rossner        Tr        Cat
 ```
 
 ----
 
 ```r
 items <- science[ ,-c(26:29)]
-```
-
-```
-## Warning: restarting interrupted promise evaluation
-```
-
-```
-## Warning: internal error -2 in R_decompress1
-```
-
-```
-## Error in eval(expr, envir, enclos): lazy-load database '/Users/Daniel/Dropbox/Teaching/tidyverse_course/1_intro_r/.cache/load_r2Winsteps_3fdddce81ab4519e3a36c8d4f2bf1df0.rdb' is corrupt
-```
-
-```r
 dems <- science[ ,c(26:29)]
-```
 
-```
-## Warning: restarting interrupted promise evaluation
-
-## Warning: internal error -2 in R_decompress1
-```
-
-```
-## Error in eval(expr, envir, enclos): lazy-load database '/Users/Daniel/Dropbox/Teaching/tidyverse_course/1_intro_r/.cache/load_r2Winsteps_3fdddce81ab4519e3a36c8d4f2bf1df0.rdb' is corrupt
-```
-
-```r
 pars <- runWinsteps(items, dems)
-```
-
-```
-## Error in runWinsteps(items, dems): cannot open file '/Users/Daniel/Dropbox/Teaching/tidyverse_course/1_intro_r/.cache/run_pc_mod_04e289573a3bbe4cc8ca7452840426da.rdb': No such file or directory
-```
-
-```r
 head(pars$ItemParameters)
 ```
 
 ```
-## Error in head(pars$ItemParameters): cannot open file '/Users/Daniel/Dropbox/Teaching/tidyverse_course/1_intro_r/.cache/run_pc_mod_04e289573a3bbe4cc8ca7452840426da.rdb': No such file or directory
+##   Entry Difficulty Status Count RawScore   SE Infit Infit_Z Outfit
+## 1     1      -0.40      1    75      109 0.21  0.55   -3.48   0.49
+## 2     2      -0.71      1    75      116 0.22  0.93   -0.39   0.72
+## 3     3       0.42      1    75       88 0.19  0.57   -3.54   0.54
+## 4     4       1.75      1    75       52 0.20  0.89   -0.68   0.91
+## 5     5       2.42      1    75       37 0.22  2.30    5.61   3.62
+## 6     6       0.31      1    75       91 0.19  0.81   -1.37   0.76
+##   Outfit_Z Displacement PointMeasureCorr Weight ObservMatch ExpectMatch
+## 1    -2.53            0             0.64      1        77.0        61.7
+## 2    -1.02            0             0.58      1        74.3        64.4
+## 3    -3.05            0             0.72      1        73.0        57.7
+## 4    -0.44            0             0.60      1        67.6        60.1
+## 5     7.27            0             0.05      1        52.7        68.1
+## 6    -1.38            0             0.61      1        70.3        58.3
+##   PointMeasureExpected RMSR  WMLE Group Model Recoding ItemID
+## 1                 0.49 0.42 -0.39     1     R        .  item1
+## 2                 0.46 0.52 -0.70     1     R        .  item2
+## 3                 0.55 0.46  0.42     1     R        .  item3
+## 4                 0.61 0.55  1.74     1     R        .  item4
+## 5                 0.61 0.79  2.41     1     R        .  item5
+## 6                 0.54 0.55  0.31     1     R        .  item6
 ```
 
 ----
@@ -471,17 +470,7 @@ head(pars$ItemParameters)
 plot(pars)
 ```
 
-```
-## Warning in plot(pars): restarting interrupted promise evaluation
-```
-
-```
-## Warning in plot(pars): internal error -3 in R_decompress1
-```
-
-```
-## Error in plot(pars): lazy-load database '/Users/Daniel/Dropbox/Teaching/tidyverse_course/1_intro_r/.cache/run_pc_mod_04e289573a3bbe4cc8ca7452840426da.rdb' is corrupt
-```
+![plot of chunk plot_pc_mod](assets/fig/plot_pc_mod-1.png)
 
 ----
 ## Is this exciting!?! YES!!!
@@ -955,18 +944,7 @@ Alternatively, you can evaluate the code without displaying it, using `echo =
 <img src = ./assets/img/codeChunk3.png width = 550 height = 150>
 </div>
 
-
-```
-## Warning: restarting interrupted promise evaluation
-```
-
-```
-## Error in eval(expr, envir, enclos): cannot open file '/Users/Daniel/Dropbox/Teaching/tidyverse_course/1_intro_r/.cache/kable_5032776211884c61693451246bfbb505.rdb': No such file or directory
-```
-
-```
-## Error in with(mtcars, plot(mpg, hp, xlab = "Miles Per Gallon", ylab = "Horsepower", : cannot open file '/Users/Daniel/Dropbox/Teaching/tidyverse_course/1_intro_r/.cache/plotExample_56fa8b83d3134bd84f7cfb0c42b53b60.rdb': No such file or directory
-```
+![plot of chunk plotExample](assets/fig/plotExample-1.png)
 
 -----
 ## tables (very briefly)
@@ -1053,7 +1031,7 @@ print(mat,
 ```
 
 <!-- html table generated in R 3.3.2 by xtable 1.8-2 package -->
-<!-- Thu Jan 19 10:18:48 2017 -->
+<!-- Thu Jan 19 10:24:42 2017 -->
 <table border=1>
 <tr> <th>  </th> <th> $R^2$ </th> <th> $\bar{x}$ </th> <th> F-stat </th> <th> S.E.E </th> <th> DW </th>  </tr>
   <tr> <td align="right"> $y_{t-1}$ </td> <td align="right"> 0.90 </td> <td align="right"> 0.89 </td> <td align="right"> 200.00 </td> <td align="right"> 0.04 </td> <td align="right"> 2.00 </td> </tr>
@@ -1071,7 +1049,7 @@ print(mat,
 
 ```
 ## <!-- html table generated in R 3.3.2 by xtable 1.8-2 package -->
-## <!-- Thu Jan 19 10:18:48 2017 -->
+## <!-- Thu Jan 19 10:24:42 2017 -->
 ## <table border=1>
 ## <tr> <th>  </th> <th> $R^2$ </th> <th> $\bar{x}$ </th> <th> F-stat </th> <th> S.E.E </th> <th> DW </th>  </tr>
 ##   <tr> <td align="right"> $y_{t-1}$ </td> <td align="right"> 0.90 </td> <td align="right"> 0.89 </td> <td align="right"> 200.00 </td> <td align="right"> 0.04 </td> <td align="right"> 2.00 </td> </tr>
