@@ -461,9 +461,13 @@ mlm_c <- lmer(mean_link_ela ~ 1 + time + time2 + (1 + time|stateabb), data = sed
 ```
 For more abbreviated (and essential) output
 
-```{r mlm_c_smry}
+```{r mlm_c_smry_echo, eval = FALSE}
 library(arm)
 display(mlm_c, detail = TRUE)
+```
+
+```{r mlm_c_smry_eval, echo = FALSE}
+arm::display(mlm_c, detail = TRUE)
 ```
 
 ----

@@ -930,7 +930,22 @@ qqmath(re)
 display(mlm_c, detail = TRUE)
 </code></pre>
 
-<pre><code>## Error in UseMethod(&quot;display&quot;): no applicable method for &#39;display&#39; applied to an object of class &quot;c(&#39;lmerMod&#39;, &#39;merMod&#39;)&quot;
+<pre><code>## lmer(formula = mean_link_ela ~ 1 + time + time2 + (1 + time | 
+##     stateabb), data = seda)
+##             coef.est coef.se t value
+## (Intercept) 206.22     1.33  155.15 
+## time         10.24     0.21   49.46 
+## time2         0.37     0.03   10.89 
+## 
+## Error terms:
+##  Groups   Name        Std.Dev. Corr  
+##  stateabb (Intercept)  9.35          
+##           time         1.01    -0.66 
+##  Residual             13.31          
+## ---
+## number of obs: 54155, groups: stateabb, 51
+## AIC = 434444, DIC = 434420
+## deviance = 434424.9
 </code></pre>
 
   </article>
